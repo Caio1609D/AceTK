@@ -1,19 +1,25 @@
 {
   "name": "acetk",
-  "version": "0.0.0",
-  "description": "A utility package for developing more accessible sites",
+  "version": "1.0.0-alpha",
+  "description": "AceTK (Abbreviation for Accessibility Toolkit) is a npm package originally made as a CS50 Final Project whhich has the purpose of providing utility features to help your site to conform with WCAG 2.1, and also make it more accessible in general. The project is currently under improvement, and thus a lot of changes are coming in a near future.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bugs": {
-    "email": "caioreisoliveiradev@gmail.com"
+    "email": "caioreisoliveiradev@gmail.com",
+    "url": "https://github.com/Caio1609D/AceTK/issues"
   },
+  "homepage": "https://github.com/Caio1609D/AceTK",
   "keywords": [
     "Acessibility", 
     "WCAG"
   ],
-  "author": "Caio Reis Oliveira <caioreisoliveiradev@gmail.com>",
+  "author": "Caio Oliveira <caioreisoliveiradev@gmail.com>",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Caio1609D/AceTK.git"
+  }
 }
