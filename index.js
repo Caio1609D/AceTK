@@ -233,7 +233,7 @@ class AceClass {
         
         this.addRule("div.AceTKSelectorContainer", {
             "width": "11vw", 
-            "background-color": "black", 
+            "background-color": this.color, 
             "display": "flex", 
             "align-items": "center", 
             "height": "5vh",
@@ -245,7 +245,7 @@ class AceClass {
     
         this.addRule("input.AceTKSelector", {
             "apearence": "none",
-            "accent-color": "white",
+            "accent-color": this.seccolor,
             "border": "none",
             "width": "7.8vw"
         })
@@ -864,6 +864,11 @@ class AceClass {
             "background-color": this.color,
             "color": this.seccolor
         })
+
+        this.addRule(".AceTKPanelContainer > button", {
+            "border": "1px solid",
+            "border-color": this.color
+        })
         
         this.addRule(".AceTKPanel", {
             "display": "flex",
@@ -885,6 +890,8 @@ class AceClass {
     
         this.addRule(".AceTKPanel button", {
             "background-color": this.seccolor,
+            "border": "1px solid",
+            "border-color": this.seccolor,
             "color": this.color,
             "width": "100%",
             "margin-left": "-1%"
