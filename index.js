@@ -212,7 +212,7 @@ class AceClass {
         const container = document.createElement("div")
         const controler = document.createElement("input")
         const img = document.createElement("img")
-        img.setAttribute("src", "../static/Speaker_Icon.png")
+        img.setAttribute("src", "https://unpkg.com/acetk@1.0.4-alpha/src/Speaker_Icon.png")
         controler.setAttribute("type", "range")
         controler.setAttribute("class", "AceTKSelector")
         container.setAttribute("class", "AceTKSelectorContainer")
