@@ -1,5 +1,5 @@
-import { AceClass } from "./src/ace.cjs";
-import { mech } from "./src/mech.cjs";
+let AceClass = require("./src/ace.cjs");
+let mech = require("./src/mech.cjs");
 const AceTK = new AceClass()
 
 if(typeof exports != "undefined"){    
