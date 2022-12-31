@@ -1,0 +1,19 @@
+{
+  "name": "acetk",
+  "version": "0.0.0",
+  "description": "A utility package for developing more accessible sites",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bugs": {
+    "email": "caioreisoliveiradev@gmail.com"
+  },
+  "keywords": [
+    "Acessibility", 
+    "WCAG"
+  ],
+  "author": "Caio Reis Oliveira <caioreisoliveiradev@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
