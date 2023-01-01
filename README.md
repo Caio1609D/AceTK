@@ -172,7 +172,7 @@ The Mechanism Class is a class that make it easier to attribute listeners and ca
 ##### Design Choices
 The Class takes in two obligatory parameters: Query and Function, being the query the queryselector that points to the desired element and the Function being the callback function that will be called by the event listener.
 
-A Proxy with the Constructor trap to add a EventListener to the Element immeaditly when the new operator is called for a mechanism.
+The class also has a Proxy with the Constructor trap to add a EventListener to the Element immeaditly when the new operator is called for a mechanism.
 
 The design of this functions is mostly for requiring as little effort as possible from the (web) developer, such as usign a queryselector in the class instead of having to select the element previsously to add the event lsitener, and adding the event listener immeadtly at the creation of the class, with no need for any function call. This is intended to incentive the developer to create his/hers very own mechanisms and thus make it's sites more accessible in a way that fits the general design of the site.
 
