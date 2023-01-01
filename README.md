@@ -135,7 +135,9 @@ idealcolor[i] = (p[i] != 0) ? realcolor[i] + rd * p[i] / (constant[i] / 510) : 0
 
 Consider:
 > p = An array with the proportion of each color in the total sum of the RGB values
+
 > rd = The 8bit difference previously calculated
+
 > constant = The WCAG constants in the calculation of relative luminance
 
 The calculations's purpose are actually preety simple. It sums the difference with the proportion of the color in order to maintain the original color (but brigther), and increases the value *inversely* proportional to the constant, as colors that have less relevance in the luminance calculations will need to have increased values to reach the desired luminance. By the way, if you have any doubt about contrast ratio and relative luminance calculation, make sure to check WCAG glossary of terms to see the formulas.
