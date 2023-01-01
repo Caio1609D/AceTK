@@ -122,3 +122,13 @@ setSpacing(num, element) {
 setContrast() function calculates the relative luminance of a text and it's background and then change it's luminance until they reach the given constrast ratio.
 
 ##### Design Choices
+This function's behavior is particularly interesting. It basically calculates an ideal luminance for both color and background, calculates the difference between ideal and real, and then convert this difference to 8bit values, and then calculates the ideal color using the following formula:
+```
+idealcolor[i] = (p != 0) ? realcolor[i] + rd * p / (constant[i] / 510) : 0
+```
+Consider:
+
+> p = proportion of the color (RGB) in the sum of colors
+rd = The 8bit difference to calculate
+constant = The WCAG constants in the calculation of relative luminance
+
