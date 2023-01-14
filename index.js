@@ -13,7 +13,7 @@ class AceClass {
             {
                 "text": "Looks like we have an image without text alternative. Please, consider using alt HTML attribute or another form of alternative text content", 
                 "exceptions": ["It serves purpose of Input", "Time Based Media (Video)", "It is a Test", "Is intended to create sensory experience", "It is a CAPTCHA", "It is purely decorative", "Another"],
-                "query": "image",
+                "query": "img",
                 "func": this.checkImg
             },
             "1.4.2": 
@@ -47,7 +47,7 @@ class AceClass {
     }
 
     addRule(selector, css) {
-        var propText = typeof css === "string" ? css : Object.keys(css).map(function (p) {
+        var propText = typeof css === "string" ? css : Object.keys(css).map((p) => {
             return p + ":" + (p === "content" ? "'" + css[p] + "'" : css[p]);
         }).join(";");
         this.sheet.insertRule(selector + "{" + propText + "}", this.sheet.cssRules.length);
@@ -77,16 +77,22 @@ class AceClass {
     
         container.style.setProperty("position", "absolute")
         container.style.setProperty("background-color", this.color)
-        container.style.setProperty("font-color", this.seccolor)
+        p.style.setProperty("background-color", this.color)
+        container.style.setProperty("color", this.seccolor)
+        p.style.setProperty("color", this.seccolor)
         container.style.setProperty("border", "solid 1px")
         container.style.setProperty("border-color", this.seccolor)
     
         except.innerText = "Exceptions"
+        except.style.setProperty("background-color", this.seccolor)
+        except.style.setProperty("color", this.color)
         exceptlist.style.setProperty("position", "absolute")
     
         for (let i = 0; i < exceptions.length; i++) {
             let exception = document.createElement("button")
             exception.innerText = exceptions[i]
+            exception.style.setProperty("background-color", this.seccolor)
+            exception.style.setProperty("color", this.color)
             exception.addEventListener("click", () => {
                 container.remove()
             })
@@ -123,17 +129,17 @@ class AceClass {
     }
     
     smallscan(article) {
-        const func = article["func"]
+        const func = this.wcag[article].func
         document.querySelectorAll(this.wcag[article].query).forEach((e) => {
             if (func(e)) {
-                createPop(this.wcag[article].text, e, this.wcag[article].exceptions)
+                this.createPop(this.wcag[article].text, e, this.wcag[article].exceptions)
             }
         })
     }
 
     scan() {
         for (const i in this.wcag) {
-            this.smallscan(wcag[i])
+            this.smallscan(i)
         }
     }
     
@@ -191,20 +197,31 @@ class AceClass {
         return false
     }
     
-    SRDescription(id, description) {
-        const element = document.querySelector(`#${id}`)
+    SRDescription(query, description) {
+        const element = document.querySelector(query)
+        console.log(element)
         const desc = document.createElement("span")
+        desc.setAttribute("class", "AceTKSRO")
         desc.innerText = description + ":"
+        
+        this.addRule(".AceTKSRO", {
+            "position": "absolute",
+            "color": "rgba(0, 0, 0, 0)",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "width": "1px",
+            "height": "1px",
+            "top": "0",
+            "left": "0"
+        })
+
         this.insertBefore(desc, element)
     }
     
     changeAudio(volume) {
         document.querySelectorAll("audio, video").forEach((e) => {
-            if (!(e.hasAttribute("volume"))) {
-                e.setAttribute("volume", volume)
-            } else {
-                e.setAttribute("volume", "" + (e.getAttribute("volume") * volume))
-            }
+            e.pause()
+            e.setAttribute("volume", volume)
+            e.play()
         })
     }
     
@@ -212,7 +229,7 @@ class AceClass {
         const container = document.createElement("div")
         const controler = document.createElement("input")
         const img = document.createElement("img")
-        img.setAttribute("src", "https://unpkg.com/acetk@1.0.4-alpha/src/Speaker_Icon.png")
+        img.setAttribute("src", "https://unpkg.com/acetk@1.0.18-alpha/src/Speaker_Icon.png")
         controler.setAttribute("type", "range")
         controler.setAttribute("class", "AceTKSelector")
         container.setAttribute("class", "AceTKSelectorContainer")
@@ -223,7 +240,7 @@ class AceClass {
         container.appendChild(img)
         container.appendChild(controler)
     
-        controler.addEventListener("onchange", () => {
+        controler.addEventListener("change", () => {
             this.changeAudio(controler.getAttribute("value"))
         })
     
@@ -255,8 +272,10 @@ class AceClass {
             "height": "1.9vw",
             "margin-left": "0.5vw"
         })
-    
+
         this.body.appendChild(container)
+
+        this.SRDescription("input.AceTKSelector", "This input tag controls the overall volume of the page")
     }
     
     createSkipper(query) {
@@ -327,6 +346,8 @@ class AceClass {
     }
 
     setSpacing(num, element) {
+        if (!element) element = document.querySelector("body")
+
         let win = window.getComputedStyle(element)
         let fontSize = win.fontSize
     
@@ -358,6 +379,8 @@ class AceClass {
     }
 
     changeFont(size, element) {
+        if (!element) element = document.querySelector("body")
+
         let font;
         let win = window.getComputedStyle(element)
         let id = parseInt(element.getAttribute("accessibility-toolkit-id"))
@@ -383,7 +406,6 @@ class AceClass {
 
     setContrast(ratio) {
         document.querySelectorAll("body *").forEach((e) => {
-            console.log("\n")
             // Gets the computed style of the current element
             let style = window.getComputedStyle(e)
     
@@ -435,8 +457,6 @@ class AceClass {
             back.forEach((e, i) => {
                 bp[i] = e / (bsum + 1)
             })
-    
-            //console.log(`Element is ${e.tagName} cp is ${cp} and bp is ${bp}`)
             
             let constant = [0.2126, 0.7152, 0.0722]
     
@@ -464,13 +484,10 @@ class AceClass {
                 if (ibl > bl) {
                     ibl = bl
                 }
-                console.log(`color is ${color}, back is ${back}, cl is ${cl} and bl is ${bl}`)
-                console.log(`icl is ${icl} and ibl is ${ibl}`)
     
                 // The difference between the ideal luminance and the actual luminance
                 let cd = icl - cl
                 let bd = bl - ibl
-                //console.log(`cd is ${cd} and bd is ${bd}`)
     
                 let rcd = (cd < 0.03928) ? cd * 12 * 255 : (cd ** (1/2.4) * 1.055 - 0.055) * 255;
     
@@ -483,8 +500,6 @@ class AceClass {
                 let iback = bp.map((e, i) => {
                     return (e != 0) ? back[i] - rbd * e / (constant[i] / e): 0
                 })
-    
-                console.log(`cp is ${cp} and bp is ${bp} icolor is ${icolor} and iback is ${iback}`)
     
                 let crest = 0;
                 let brest = 0;
@@ -585,9 +600,6 @@ class AceClass {
                     })
                 }
     
-                console.log(`The new font-color was set to ${newColor} and background to ${newBack}`)
-                console.log(`rcd was ${rcd} and rbd was ${rbd}`)
-    
                 e.style.setProperty("color", `rgb(${newColor[0]}, ${newColor[1]}, ${newColor[2]})`)
                 e.style.setProperty("background-color", `rgb(${newBack[0]}, ${newBack[1]}, ${newBack[2]})`)
     
@@ -619,7 +631,6 @@ class AceClass {
     
                 cl = constant[0] * cRGB[0] + constant[1] * cRGB[1] + constant[2] * cRGB[2]
                 bl = constant[0] * bRGB[0] + constant[1] * bRGB[1] + constant[2] * bRGB[2]
-                console.log(`New cl is ${cl} and new bl is ${bl}`)
             } else if (bl + 0.05 > cl + 0.05) {
                 if ((bl + 0.05) / (cl + 0.05) >= ratio) {
                     return
@@ -641,13 +652,10 @@ class AceClass {
                 if (icl > cl) {
                     icl = cl
                 }
-                console.log(`color is ${color}, back is ${back}, cl is ${cl} and bl is ${bl}`)
-                console.log(`icl is ${icl} and ibl is ${ibl}`)
     
                 // The difference between the ideal luminance and the actual luminance
                 let bd = ibl - bl
                 let cd = cl - icl
-                //console.log(`cd is ${cd} and bd is ${bd}`)
     
                 let rbd = (bd < 0.03928) ? bd * 12 * 255 : (bd ** (1/2.4) * 1.055 - 0.055) * 255;
     
@@ -660,8 +668,6 @@ class AceClass {
                 let icolor = cp.map((e, i) => {
                     return (e != 0) ? color[i] - rcd * e / (constant[i] / e): 0
                 })
-    
-                console.log(`cp is ${cp} and bp is ${bp} icolor is ${icolor} and iback is ${iback}`)
     
                 let brest = 0;
                 let crest = 0;
@@ -762,9 +768,6 @@ class AceClass {
                     })
                 }
     
-                console.log(`The new font-color was set to ${newColor} and background to ${newBack}`)
-                console.log(`rcd was ${rcd} and rbd was ${rbd}`)
-    
                 e.style.setProperty("color", `rgb(${newColor[0]}, ${newColor[1]}, ${newColor[2]})`)
                 e.style.setProperty("background-color", `rgb(${newBack[0]}, ${newBack[1]}, ${newBack[2]})`)
     
@@ -796,7 +799,6 @@ class AceClass {
     
                 cl = constant[0] * cRGB[0] + constant[1] * cRGB[1] + constant[2] * cRGB[2]
                 bl = constant[0] * bRGB[0] + constant[1] * bRGB[1] + constant[2] * bRGB[2]
-                console.log(`New cl is ${cl} and new bl is ${bl}`)
             } else {
                 return
             }
@@ -820,7 +822,7 @@ class AceClass {
         }
     }
 
-    createResizePanel() {
+    createAcePanel() {
         let holder = document.createElement("div");
         holder.setAttribute("class", "AceTKPanelContainer")
         this.addRule(".AceTKPanelContainer", {
@@ -960,7 +962,6 @@ class AceClass {
             this.panel_vals["contrast"] = contrange.value;
             this.changeFont(this.panel_vals["size"], this.body);
             this.setSpacing(this.panel_vals["spacing"], this.body);
-            console.log(`Now setting contrast at a ratio of ${this.panel_vals["contrast"]}`)
             this.setContrast(this.panel_vals["contrast"]);
         });
     
@@ -991,8 +992,8 @@ class AceClass {
 
 const AceTK = new AceClass()
 
-class mechanism {
-    constructor (query, func, listener, input) {
+class activator{
+    constructor(query, func, listener, input) {
         this.query = query
         this.func = func
         this.listener = listener
@@ -1001,26 +1002,32 @@ class mechanism {
 
     label (text) {
         let label = document.createElement("label")
-        label.setAttribute("for", query.id)
+        label.setAttribute("for", this.query.id)
         label.innerText = text
-        insertBefore(label, this.query)
+        AceTK.insertBefore(label, this.query)
         return label
     }
 }
 
 const mechhandler = {
     construct(target, args) {
-        const element = document.querySelector(args["query"])
+        console.log("Proxy activated")
+        const element = document.querySelector(args[0])
+        console.log(args[0])
+        console.log(element)
         if (!element) {
-            return null
+            return {}
         }
         const handlers = {"INPUT": "change", "BUTTON": "click"}
-        element.addEventListener(((args["listener"]) ? args["listener"] : handlers[element.tagName]), args["func"]((args["input"]) ? args["input"] : element.value))
-        return new target(element, args["func"], args["listener"])
+        console.log(args[1])
+        element.addEventListener(((args[2]) ? args[2] : handlers[element.tagName]), () => {
+            args[1](args[3] ? args[3] : element.value)
+        })
+        return new target(element, args[1])
     }
 }
 
-const activator = new Proxy(mechanism, mechhandler);
+const mechanism = new Proxy(activator, mechhandler);
 
 if(typeof exports != "undefined"){    
     exports.AceTK = AceTK;
